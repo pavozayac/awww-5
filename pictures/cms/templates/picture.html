@@ -1,0 +1,20 @@
+{%extends "base.html"%}
+
+{%block title%} {{picture.id}} {%endblock%}
+    
+{%block body%} 
+
+<a href="/cms">List of pictures</a>
+</br>
+</br>
+</br>
+
+<h1> {{picture.name}} </h1>
+
+<svg width="{{picture.width}}" height="{{picture.height}}" viewBox="0 0 {{picture.width}} {{picture.height}}" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    {%for rectangle in rectangles%}
+        <rect x="{{rectangle.x}}" y="{{rectangle.y}}" width="{{rectangle.width}}" height="{{rectangle.height}}" fill="{{rectangle.fill}}"></rect>
+    {%endfor%}
+</svg>
+
+{%endblock%}

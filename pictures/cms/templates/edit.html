@@ -1,0 +1,16 @@
+{%extends "base.html"%}
+
+{%block title%} Edit pictures {%endblock%}
+    
+{%block body%} 
+
+List of pictures:
+    <ul>
+    {%for picture in pictures%}
+        <li><a href="/cms/{{picture.id}}">{{picture.name}}</a></li>
+    {%endfor%}
+    </ul>
+
+
+
+{%endblock%}
