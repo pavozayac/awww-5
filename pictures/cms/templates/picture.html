@@ -1,6 +1,6 @@
 {%extends "base.html"%}
 
-{%block title%} {{picture.id}} {%endblock%}
+{%block title%} {{picture.name}} {%endblock%}
     
 {%block body%} 
 
@@ -16,5 +16,44 @@
         <rect x="{{rectangle.x}}" y="{{rectangle.y}}" width="{{rectangle.width}}" height="{{rectangle.height}}" fill="{{rectangle.fill}}"></rect>
     {%endfor%}
 </svg>
+
+<h2> Information </h2>
+<h3> Size </h3>
+{{picture.width}}x{{picture.height}}
+
+{%if auth%}
+<h2> Rectangles </h2>
+
+<table>
+    <tr>
+        <th>x</th>
+        <th>y</th>
+        <th>width</th>
+        <th>height</th>
+        <th>color</th>
+        <th>actions</th>
+    </tr>
+
+    {%for rectangle in rectangles%}
+    <tr>
+        <td>{{rectangle.x}}</td>
+        <td>{{rectangle.y}}</td>
+        <td>{{rectangle.width}}</td>
+        <td>{{rectangle.height}}</td>
+        <td>{{rectangle.fill}}</td>
+        <td><a href="/cms/{{picture.id}}/{{rectangle.id}}/delete">Delete</a></td>
+    </tr>
+    {%endfor%}
+</table>
+
+<h2> Add new rectangle </h2>
+
+<form action="/cms/{{picture.id}}/" method="post">
+    {% csrf_token %}
+    {{form}}
+    <input type="submit" value="Add"/>
+</form>
+
+{%endif%}
 
 {%endblock%}
