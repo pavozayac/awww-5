@@ -1,6 +1,7 @@
 from urllib import request
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+from django.core.paginator import Paginator
 
 from .forms import RectangleForm
 # from django.http import HttpResponse
@@ -9,8 +10,14 @@ from .models import Picture, Rectangle
 
 
 def index(req):
+    pics = Picture.objects.prefetch_related('rectangles').all()
+    paginator = Paginator(pics, 10)
+
+    page_number = req.GET.get("page")
+    page = paginator.page(page_number if page_number is not None else 1)
+
     return render(req, 'pictures.html', context={
-        "pictures": Picture.objects.all(),
+        "pics_page": page,
         "auth": req.user.is_authenticated,
     })
 

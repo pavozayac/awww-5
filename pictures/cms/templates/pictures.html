@@ -14,11 +14,35 @@
 <h1> List of pictures: </h1>
 
 <ul>
-{%for picture in pictures%}
-    <li><a href="/cms/{{picture.id}}">{{picture.name}}</a></li>
+{% for picture in pics_page %}
+    <li>
+        <a href={%url 'picture' picture.id%}>{{picture.name}}</a>
+        <svg width="{{picture.width}}" height="{{picture.height}}" viewBox="0 0 {{picture.width}} {{picture.height}}" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            {%for rectangle in picture.rectangles.all %}
+                <rect x="{{rectangle.x}}" y="{{rectangle.y}}" width="{{rectangle.width}}" height="{{rectangle.height}}" fill="{{rectangle.fill}}"></rect>
+            {%endfor%}
+        </svg>
+    </li>
 {%endfor%}
 </ul>
 
+<div class="pagination">
+    <span class="step-links">
+        {% if pics_page.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ pics_page.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ pics_page.number }} of {{ pics_page.paginator.num_pages }}.
+        </span>
+
+        {% if pics_page.has_next %}
+            <a href="?page={{ pics_page.next_page_number }}">next</a>
+            <a href="?page={{ pics_page.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
 
 
 {%endblock%}
