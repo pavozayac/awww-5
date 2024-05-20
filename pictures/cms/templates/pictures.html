@@ -1,37 +1,40 @@
-{%extends "base.html"%}
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
 
-{%block title%} List of pictures {%endblock%}
+{% block title %} List of pictures {% endblock %}
     
-{%block body%} 
+{% block body %} 
 
-{%if auth %}
-<a href="/cms/edit">Edit pictures</a>
-</br>
-</br>
-</br>
-{%endif%}
+<form action={% url 'index' %} method="get">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input type="submit" value="Filter"/>
+</form>
 
-<h1> List of pictures: </h1>
+<h1> List of pictures </h1>
 
-<ul>
 {% for picture in pics_page %}
-    <li>
-        <a href={%url 'picture' picture.id%}>{{picture.name}}</a>
-        <svg width="{{picture.width}}" height="{{picture.height}}" viewBox="0 0 {{picture.width}} {{picture.height}}" version="1.1" xmlns="http://www.w3.org/2000/svg">
-            {%for rectangle in picture.rectangles.all %}
-                <rect x="{{rectangle.x}}" y="{{rectangle.y}}" width="{{rectangle.width}}" height="{{rectangle.height}}" fill="{{rectangle.fill}}"></rect>
-            {%endfor%}
-        </svg>
-    </li>
-{%endfor%}
-</ul>
+    <a href={% url 'picture' picture.id %}>
+        <div class="pic-list-container">
+            <svg width="100" height="100" viewBox="0 0 {{picture.width}} {{picture.height}}" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                {% for rectangle in picture.rectangles.all %}
+                    <rect x="{{rectangle.x}}" y="{{rectangle.y}}" width="{{rectangle.width}}" height="{{rectangle.height}}" fill="{{rectangle.fill}}"></rect>
+                {% endfor %}
+            </svg>
+            <h3> {{picture.name}} </h3>
+        </div>
+    </a>
+{% endfor %}
 
+{% if pics_page.paginator.count > 0 %}
 <div class="pagination">
     <span class="step-links">
         {% if pics_page.has_previous %}
             <a href="?page=1">&laquo; first</a>
             <a href="?page={{ pics_page.previous_page_number }}">previous</a>
         {% endif %}
+
+        </br>
 
         <span class="current">
             Page {{ pics_page.number }} of {{ pics_page.paginator.num_pages }}.
@@ -43,6 +46,9 @@
         {% endif %}
     </span>
 </div>
+{% else %}
+    <h1> No results. </h1>
+{% endif %}
 
 
-{%endblock%}
+{% endblock %}

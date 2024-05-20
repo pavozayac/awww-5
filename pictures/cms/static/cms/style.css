@@ -1,0 +1,41 @@
+.main-container {
+    padding: 3rem;
+    background: #ccc;
+    margin-top: 2rem;
+    border-radius: 1rem;
+}
+
+.pic-list-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.pic-list-container:first-of-type {
+    margin-top: 4rem;
+}
+
+.pic-list-container:hover {
+    background-color: #aaa;
+    border-radius: 1rem;
+}
+
+.pic-list-container svg {
+    border-radius: 1rem;
+    background: white;
+}
+
+.pic-list-container h3 {
+    margin-left: 3rem;
+}
+
+.picture_svg {
+    background: white;
+    border-radius: 1rem;
+}
+
+.infopanes {
+    display: flex;
+    flex-direction: row;
+    background: #000;
+}

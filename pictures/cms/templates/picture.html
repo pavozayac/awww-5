@@ -1,59 +1,90 @@
-{%extends "base.html"%}
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
 
-{%block title%} {{picture.name}} {%endblock%}
+{% block title %} {{picture.name}} {% endblock %}
     
-{%block body%} 
+{% block body %} 
 
-<a href={%url 'index' %}>List of pictures</a>
+<a href={% url 'index'  %}>List of pictures</a>
 </br>
 </br>
 </br>
 
 <h1> {{picture.name}} </h1>
 
-<svg width="{{picture.width}}" height="{{picture.height}}" viewBox="0 0 {{picture.width}} {{picture.height}}" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    {%for rectangle in rectangles%}
+<svg class="picture_svg" width="{{picture.width}}" height="{{picture.height}}" viewBox="0 0 {{picture.width}} {{picture.height}}" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    {% for rectangle in picture.rectangles.all %}
         <rect x="{{rectangle.x}}" y="{{rectangle.y}}" width="{{rectangle.width}}" height="{{rectangle.height}}" fill="{{rectangle.fill}}"></rect>
-    {%endfor%}
+    {% endfor %}
 </svg>
 
-<h2> Information </h2>
-<h3> Size </h3>
-{{picture.width}}x{{picture.height}}
+<div class="infopanes">
+    {% if picture.description %}
+    <div class="infopane">
+        <h2> Description </h2>
 
-{%if auth%}
+        {{picture.description}}
+    </div>
+    {% endif %}
+
+    <div class="infopane">
+        <h2> Information </h2>
+        Size: {{picture.width}}x{{picture.height}}
+        </br>
+        Date of publication: {{picture.date_added}}
+    </div>
+
+    {% if picture.tags.split|length > 0 %}
+    <div class="infopane">
+        <h2> Tags </h2>
+        <ul>
+            {% for tag in picture.tags.split %}
+                <li> {{tag}} </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+</div>
+
+
+{% if auth %}
 <h2> Rectangles </h2>
 
-<table>
-    <tr>
-        <th>x</th>
-        <th>y</th>
-        <th>width</th>
-        <th>height</th>
-        <th>color</th>
-        <th>actions</th>
-    </tr>
+<table class="table">
+    <thead>
+        <tr>
+            <th>x</th>
+            <th>y</th>
+            <th>width</th>
+            <th>height</th>
+            <th>color</th>
+            <th>actions</th>
+        </tr>
+    </thead>
 
-    {%for rectangle in rectangles%}
-    <tr>
-        <td>{{rectangle.x}}</td>
-        <td>{{rectangle.y}}</td>
-        <td>{{rectangle.width}}</td>
-        <td>{{rectangle.height}}</td>
-        <td>{{rectangle.fill}}</td>
-        <td><a href="/cms/{{picture.id}}/{{rectangle.id}}/delete">Delete</a></td>
-    </tr>
-    {%endfor%}
+    <tbody>
+    {% for rectangle in picture.rectangles.all %}
+        <tr>
+            <td>{{rectangle.x}}</td>
+            <td>{{rectangle.y}}</td>
+            <td>{{rectangle.width}}</td>
+            <td>{{rectangle.height}}</td>
+            <td>{{rectangle.fill}}</td>
+            <td><a href={% url 'delete_rectangle' picture.id rectangle.id %}>Delete</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
 </table>
 
-<h2> Add new rectangle </h2>
+<h2> Add rectangle </h2>
 
-<form action="/cms/{{picture.id}}/" method="post">
+<form action={% url 'picture' picture.id %} method="post">
     {% csrf_token %}
-    {{form}}
+    {{ form|crispy }}
     <input type="submit" value="Add"/>
 </form>
 
-{%endif%}
+{% endif %}
 
-{%endblock%}
+{% endblock %}
