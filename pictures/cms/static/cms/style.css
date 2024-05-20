@@ -37,5 +37,13 @@
 .infopanes {
     display: flex;
     flex-direction: row;
-    background: #000;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.infopane {
+    background: #888;
+    flex: 1;
+    border-radius: 1rem;
+    padding: 1rem;
 }

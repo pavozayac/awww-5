@@ -26,6 +26,8 @@
     </a>
 {% endfor %}
 
+</br>
+
 {% if pics_page.paginator.count > 0 %}
 <div class="pagination">
     <span class="step-links">
@@ -33,8 +35,6 @@
             <a href="?page=1">&laquo; first</a>
             <a href="?page={{ pics_page.previous_page_number }}">previous</a>
         {% endif %}
-
-        </br>
 
         <span class="current">
             Page {{ pics_page.number }} of {{ pics_page.paginator.num_pages }}.
